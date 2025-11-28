@@ -1,10 +1,11 @@
-Как запустить проект
-
+Как запустить бэкэнд?
 ```shell
-cd backend
-mvn package
-java -jar target/Messenger-1.0.jar
+sh start_messenger.sh
 ```
 Где посмотреть какие данные нужны для методов?
 backend/src/main/java/org.example/dto
 В папке dto все структуры, которые принимают методы. Прим. UserCreateDTO - структура для создания пользователя.
+
+Теперь все руты, кроме /auth/login, /user/registration, / (main page), /error доступны ТОЛЬКО С АУТЕНТИФИКАЦИЕЙ.
+Аутенификация реализована при помощи JWT токенов. Access Token нужно передавать в заголовках "Authnentication: Bearer <Токен>"
+Refresh Token нужно передавать в теле запроса. 
