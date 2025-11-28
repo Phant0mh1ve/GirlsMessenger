@@ -28,7 +28,7 @@ public class User implements BaseEntity{
     @Email
     private String email;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 72)
     private String passwordHash;
 
     @URL

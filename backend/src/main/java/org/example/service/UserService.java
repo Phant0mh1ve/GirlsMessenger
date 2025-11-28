@@ -1,28 +1,26 @@
 package org.example.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.example.dto.userDto.*;
 import org.example.entity.User;
+import org.example.exception.BadRequest;
 import org.example.exception.ResourceAlreadyExistsException;
 import org.example.exception.ResourceNotFoundException;
 import org.example.mapper.UserMapper;
 import org.example.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Transactional //все методы транзакционные
+@Transactional
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
-
-    @Autowired
-    public UserService(UserRepository repository, UserMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
+    private final PasswordEncoder encoder;
 
     public List<UserDTO> index(){
         return mapper.map(repository.findAll());
@@ -44,6 +42,10 @@ public class UserService {
         });
 
         User user = mapper.map(dto);
+        if (dto.getPassword().length() > 72){
+            throw new BadRequest("Password can't be longer than 72 symbols");
+        }
+        user.setPasswordHash(encoder.encode(dto.getPassword()));
         repository.save(user);
 
         return mapper.map(user);

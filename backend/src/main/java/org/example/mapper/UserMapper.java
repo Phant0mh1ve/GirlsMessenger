@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
+    @Mapping(target = "passwordHash", ignore = true)
     public abstract User map(UserCreateDTO dto);
 
     @Mapping(target = "chats", source = "chats", qualifiedByName = "ChatsToIds")
